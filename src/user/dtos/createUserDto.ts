@@ -1,14 +1,14 @@
 export class CreateUserDto {
-    name?: string
+    name: string
     email?: string
-    password?: string
+    password: string 
     jewelsAmount?: number
     products?: Product[]
     photo?: string
-    constructor(userData?: CreateUser) {
-        this.name = userData?.name,
+    constructor(userData: CreateUser) {
+        this.name = userData.name,
         this.email = userData?.email,
-        this.password = userData?.password,
+        this.password = userData.password,
         this.jewelsAmount = userData?.jewelsAmount,
         this.products = userData?.products,
         this.photo = userData?.photo
@@ -16,9 +16,9 @@ export class CreateUserDto {
 }
 
 type CreateUser = {
-    name?: string,
+    name: string,
     email?: string,
-    password?: string,
+    password: string,
     jewelsAmount?: number,
     products?: Product[],
     photo?: string
