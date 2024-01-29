@@ -5,8 +5,8 @@ name: {type: String, required: true},
 email: {type: String, required: true},
 password: {type: String, required: true},
 jewelsAmount: {type: Number},
-products: {Type: Types.ObjectId, ref: 'Product', required: true },
-photo: {Type: String},
+products: {type: Types.ObjectId, ref: 'Product', required: true },
+photo: {type: String},
 deletedAt: { type: Date,default: null}
 }, {
 timestamps: true

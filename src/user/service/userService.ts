@@ -6,6 +6,8 @@ import { User } from "../model/userModel"
 import bcrypt from 'bcrypt'
 import { IUserService } from "./userServiceInterface"
 import { IUserRepository } from "../repository/userRepositoryInterface"
+import jwt from 'jsonwebtoken'
+import { LoginDataDTO } from "../dtos/loginDataDto"
 
 export class UserService implements IUserService {
     constructor(private userRepository: IUserRepository){}
@@ -18,6 +20,7 @@ export class UserService implements IUserService {
         }
         return newUser
     }
+
     async findUserByEmail(email: string): Promise<User | null> {
         const user = await this.userRepository.findUserByEmail(email)
         if(!user){
@@ -25,6 +28,44 @@ export class UserService implements IUserService {
         }
         return user
     }
+
+    async loginUser(loginData: LoginDataDTO): Promise<string>{
+        try {
+        const userLogin = await this.findUserByEmail(loginData.email)
+        
+        if(!userLogin || !userLogin.password){
+          throw new Error('User not found.')
+        }
+    
+        const userPassword = userLogin.password as string
+
+        const validPasswordUser = await bcrypt.compare(loginData.password, userPassword)
+    
+        if(!validPasswordUser){
+          throw new Error('Invalid email/password.')
+        }
+    
+    
+        userLogin.password = null
+        delete userLogin.password
+    
+        const payload = {...userLogin}
+        const secretKey = process.env.JWT_SECRET_KEY as string
+        const options = { expiresIn: '1h'}
+    
+        const token = jwt.sign(payload, secretKey, options)
+    
+        return token
+      }
+     catch (error: any) {
+        if (error instanceof Error) {
+            throw new Error(error.message)
+        } else {
+            throw new Error('An unexpected error occurred.')
+        }
+    }
+}
+
 
     async getById(id: string): Promise<User | null> {
         const user =  await this.userRepository.getById(id)
