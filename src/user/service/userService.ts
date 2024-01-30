@@ -13,6 +13,10 @@ export class UserService implements IUserService {
     constructor(private userRepository: IUserRepository){}
 
     async createUser(userData: CreateUserDto): Promise<User | null> {
+        const existingUser = await this.findUserByEmail(userData.email);
+        if (existingUser) {
+            throw new Error('User with this email already exists');
+        }
         userData.password = await bcrypt.hash(userData.password, 5)
         const newUser = await this.userRepository.createUser(userData)
         if(!newUser){
