@@ -65,3 +65,8 @@ Lucas Perdigão7:48 p.m.
 cat ~/.ssh/id_rsa.pub
 Lucas Perdigão7:50 p.m.
 ssh -T git@github.com
+
+
+1 - Validar se existe um token no header
+2 - Validar o token
+3 - Ir para o proximo
