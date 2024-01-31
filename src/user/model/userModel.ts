@@ -4,7 +4,7 @@ const userSchema = new Schema({
 name: {type: String, required: true},
 email: {type: String, required: true},
 password: {type: String, required: true},
-jewelsAmount: {type: Number},
+jewelsAmount: {type: Number, default: 0},
 products: [{type: Types.ObjectId, ref: 'Product'}],
 photo: {type: String},
 deletedAt: { type: Date,default: null}

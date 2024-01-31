@@ -71,4 +71,32 @@ export class UserController implements IUserController {
         }
         
     }
+
+    //ENVIAR JOIA
+
+    async updateJewelAmount(req: Request, res: Response): Promise<void> {
+        try{
+            const {id} = req.params
+            const {body} = req
+            const updated = await this.userService.updateJewelAmount(id, body)
+            res.status(200).json(updated)
+        }catch(e: any) {
+            res.status(500).json(e)
+        }
+    }
+
+    //ATUALIZAR ARRAY DE PRODUCTS DE USUARIO
+
+    async updateProductUser (req: Request, res: Response): Promise<void> {
+        try{
+            const {idUser} = req.params
+            const {idProduct} = req.body
+            const updated = await this.userService.updateProductUser(idUser, idProduct)
+            res.status(200).json(updated)
+        }catch(e: any) {
+            res.status(500).json(e)
+        }
+    }
+
+
 }

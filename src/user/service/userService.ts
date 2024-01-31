@@ -8,9 +8,13 @@ import { IUserService } from "./userServiceInterface"
 import { IUserRepository } from "../repository/userRepositoryInterface"
 import jwt from 'jsonwebtoken'
 import { LoginDataDTO } from "../dtos/loginDataDto"
+import { JewelsUpdateDto } from "../dtos/jewelUpdateDto"
+import { IProductRepository } from "../../product/repository/userRepositoryInterface"
 
 export class UserService implements IUserService {
-    constructor(private userRepository: IUserRepository){}
+    constructor(private userRepository: IUserRepository, private productRepository: IProductRepository){}
+
+    //LOGICA DA FOTO
 
     async createUser(userData: CreateUserDto): Promise<User | null> {
         const existingUser = await this.findUserByEmail(userData.email);
@@ -102,5 +106,39 @@ export class UserService implements IUserService {
             throw new Error ('cannot delete this user')
         }
         return deleted
+    }
+
+    //enviar joia
+    async updateJewelAmount(id: string, jewelUpdate: JewelsUpdateDto): Promise<User | null> {
+        const validId = await this.userRepository.getById(id)
+        if(!validId){
+            throw new Error('id is invalid')
+        }
+
+        const updated = await this.userRepository.updateJewel(id, jewelUpdate)
+        if(!updated){
+            throw new Error('User cannot updated')
+        }
+        return updated
+    }
+
+    //resgatar produto/atualizar array de produtos de usuario
+
+    async updateProductUser(idUser: string, idProduct: string): Promise<User | null> {
+        const validId = await this.userRepository.getById(idUser)
+        if(!validId){
+            throw new Error('id is invalid')
+        }
+
+        const product = await this.productRepository.getById(idProduct);
+        if (!product) {
+        throw new Error('Product ID is invalid or does not exist');
+        }
+
+        const updated = await this.userRepository.updateProductUser(idUser, idProduct)
+        if(!updated){
+            throw new Error('cannot updated Product array from user')
+        }
+        return updated
     }
 }

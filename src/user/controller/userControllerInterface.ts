@@ -7,4 +7,6 @@ export interface IUserController {
     getById(req: Request, res: Response): Promise<void>
     updateUser(req: Request, res: Response): Promise<void>
     softDelete(req: Request, res: Response): Promise<void>
+    updateJewelAmount(req: Request, res: Response): Promise<void>
+    updateProductUser (req: Request, res: Response): Promise<void>
 }

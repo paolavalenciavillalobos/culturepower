@@ -9,3 +9,5 @@ userRoutes.post('/user/login',  userFactoryModule.loginUser.bind(userFactoryModu
 userRoutes.get('/user/:id',  userFactoryModule.getById.bind(userFactoryModule))
 userRoutes.put('/user/:id',  userFactoryModule.updateUser.bind(userFactoryModule))
 userRoutes.put('/user/delete/:id',  userFactoryModule.softDelete.bind(userFactoryModule))
+userRoutes.put('/user/jewels/:id',  userFactoryModule.updateJewelAmount.bind(userFactoryModule))
+userRoutes.put('/user/getproduct/:id',  userFactoryModule.updateProductUser.bind(userFactoryModule))

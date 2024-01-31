@@ -70,3 +70,10 @@ ssh -T git@github.com
 1 - Validar se existe um token no header
 2 - Validar o token
 3 - Ir para o proximo
+
+
+1 - Pegar o usuário pelo id
+2 - Somar a quantidade de joias do usuário  com a quantidade do parametro
+
+
+Update Push with mongoose/

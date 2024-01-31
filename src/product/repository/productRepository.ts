@@ -3,6 +3,7 @@ import { Product } from '../model/productModel'
 import { CreateProductDto } from "../dto/createProductDto"
 import { UpdateProductDto } from "../dto/updateProductDto"
 import { IProductRepository } from "./userRepositoryInterface"
+import { error } from "console"
 
 export class ProductRepository implements IProductRepository {
     constructor (private productModel: Model<Product>) {}
