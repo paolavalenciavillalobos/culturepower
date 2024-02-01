@@ -10,6 +10,7 @@ export class ProductController implements IProductController {
         try{
             const { body } = req
             const newProduct = await this.productService.createProduct(body)
+            console.log(newProduct)
             res.status(200).json(newProduct)
         }catch(e: any){
             res.status(500).json(e)

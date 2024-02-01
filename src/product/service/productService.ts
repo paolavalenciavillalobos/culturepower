@@ -10,6 +10,7 @@ export class ProductService implements IProductService {
 
     async createProduct(productData: CreateProductDto): Promise<Product | null> {
         const newProduct = await this.productRepository.createProduct(productData)
+        console.log(newProduct)
         return newProduct
     }
 

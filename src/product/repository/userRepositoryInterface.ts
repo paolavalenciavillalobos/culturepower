@@ -1,4 +1,5 @@
 import { CreateProductDto } from "../dto/createProductDto"
+import { AmountUpdateDto } from "../dto/updateAmount"
 import { UpdateProductDto } from "../dto/updateProductDto"
 import { Product } from "../model/productModel"
 
@@ -8,4 +9,5 @@ export interface IProductRepository {
     getById(id: string): Promise<Product | null>
     updateProduct(id: string, dataUpdate: UpdateProductDto): Promise<Product | null>
     softDeleteProduct(id: string): Promise<Product | null>
+    updateAmount(id: string, amountUpdate: AmountUpdateDto): Promise<Product | null>
 }

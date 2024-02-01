@@ -60,7 +60,7 @@ export class UserRepository implements IUserRepository {
             { $push: { products: idProduct } },
             { new: true }
         )
-
+        console.log(updatedUser)
         return updatedUser;
     }
 

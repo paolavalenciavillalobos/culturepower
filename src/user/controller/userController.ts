@@ -89,9 +89,9 @@ export class UserController implements IUserController {
 
     async updateProductUser (req: Request, res: Response): Promise<void> {
         try{
-            const {idUser} = req.params
-            const {idProduct} = req.body
+            const {idUser,idProduct} = req.params
             const updated = await this.userService.updateProductUser(idUser, idProduct)
+            console.log(updated)
             res.status(200).json(updated)
         }catch(e: any) {
             res.status(500).json(e)

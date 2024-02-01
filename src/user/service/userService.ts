@@ -11,6 +11,8 @@ import { LoginDataDTO } from "../dtos/loginDataDto"
 import { JewelsUpdateDto } from "../dtos/jewelUpdateDto"
 import { IProductRepository } from "../../product/repository/userRepositoryInterface"
 
+//, private productRepository: IProductRepository
+
 export class UserService implements IUserService {
     constructor(private userRepository: IUserRepository, private productRepository: IProductRepository){}
 
@@ -125,20 +127,44 @@ export class UserService implements IUserService {
     //resgatar produto/atualizar array de produtos de usuario
 
     async updateProductUser(idUser: string, idProduct: string): Promise<User | null> {
-        const validId = await this.userRepository.getById(idUser)
-        if(!validId){
+        const user = await this.userRepository.getById(idUser)
+        if(!user){
             throw new Error('id is invalid')
+        } 
+
+        const product = await this.productRepository.getById(idProduct)
+        if (!product) {
+        throw new Error('Product ID is invalid or does not exist')
         }
 
-        const product = await this.productRepository.getById(idProduct);
-        if (!product) {
-        throw new Error('Product ID is invalid or does not exist');
+        if (product.amount < 1) {
+            throw new Error('Product is out of stock')
+        }
+        const updateAmount = product.amount - 1
+        const updatedProduct = await this.productRepository.updateAmount(idProduct, { amount: updateAmount });
+        if (!updatedProduct) {
+            throw new Error('Failed to update product');
+        }
+
+        if (typeof user.jewelsAmount !== 'number') {
+            throw new Error('Invalid type')
+        }
+
+        if (user.jewelsAmount < product.value) {
+            throw new Error('Insufficient jewels')
+        }
+
+        const newJewelsAmount = user.jewelsAmount - product.value
+        const updatedUserJewels = await this.userRepository.updateJewel(idUser, { jewelsAmount: newJewelsAmount })
+        if (!updatedUserJewels) {
+            throw new Error('Failed to update jewels on user');
         }
 
         const updated = await this.userRepository.updateProductUser(idUser, idProduct)
         if(!updated){
             throw new Error('cannot updated Product array from user')
         }
+        console.log(updated)
         return updated
     }
 }

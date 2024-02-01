@@ -77,3 +77,5 @@ ssh -T git@github.com
 
 
 Update Push with mongoose/
+
+/users/:user_id/claims/:product_id
