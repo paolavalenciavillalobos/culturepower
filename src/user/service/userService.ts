@@ -59,7 +59,7 @@ export class UserService implements IUserService {
         userLogin.password = null
         delete userLogin.password
     
-        const payload = {...userLogin}
+        const payload = {...userLogin, role: userLogin.role}
         const secretKey = process.env.JWT_SECRET_KEY as string
         const options = { expiresIn: '1h'}
     
@@ -124,7 +124,7 @@ export class UserService implements IUserService {
         return updated
     }
 
-    //resgatar produto/atualizar array de produtos de usuario
+    //resgatar produto/atualizar array de produtos em usuario
 
     async updateProductUser(idUser: string, idProduct: string): Promise<User | null> {
         const user = await this.userRepository.getById(idUser)
@@ -140,21 +140,27 @@ export class UserService implements IUserService {
         if (product.amount < 1) {
             throw new Error('Product is out of stock')
         }
+
+        const jewelsAmount = user.jewelsAmount as number
+
+        if (jewelsAmount < product.value) {
+            throw new Error('Insufficient jewels')
+        }
         const updateAmount = product.amount - 1
-        const updatedProduct = await this.productRepository.updateAmount(idProduct, { amount: updateAmount });
+        const updatedProduct = await this.productRepository.updateAmount(idProduct, updateAmount );
         if (!updatedProduct) {
             throw new Error('Failed to update product');
         }
 
-        if (typeof user.jewelsAmount !== 'number') {
+        /*if (typeof user.jewelsAmount !== 'number') {
             throw new Error('Invalid type')
         }
 
         if (user.jewelsAmount < product.value) {
             throw new Error('Insufficient jewels')
-        }
+        }*/
 
-        const newJewelsAmount = user.jewelsAmount - product.value
+        const newJewelsAmount = jewelsAmount - product.value
         const updatedUserJewels = await this.userRepository.updateJewel(idUser, { jewelsAmount: newJewelsAmount })
         if (!updatedUserJewels) {
             throw new Error('Failed to update jewels on user');

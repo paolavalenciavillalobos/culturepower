@@ -94,7 +94,7 @@ export class UserController implements IUserController {
             console.log(updated)
             res.status(200).json(updated)
         }catch(e: any) {
-            res.status(500).json(e)
+            res.status(500).json({message: e.message})
         }
     }
 

@@ -42,12 +42,12 @@ export class ProductRepository implements IProductRepository {
         return deleted
     }
 
-    async updateAmount(id: string, amountUpdate: AmountUpdateDto): Promise<Product | null> {
+    async updateAmount(id: string, amountUpdate: number): Promise<Product | null> {
         if(!isValidObjectId(id)){
             throw new Error(`error: ${id} is not valid.`)
         }
 
-        const updated = await this.productModel.findByIdAndUpdate(id, amountUpdate, { new: true })
+        const updated = await this.productModel.findByIdAndUpdate(id, {amount: amountUpdate}, { new: true })
         return updated
     }
 

@@ -7,6 +7,7 @@ password: {type: String, required: true},
 jewelsAmount: {type: Number, default: 0},
 products: [{type: Types.ObjectId, ref: 'Product'}],
 photo: {type: String},
+role: {type: String, enum: ['client', 'admin'], default: 'client'},
 deletedAt: { type: Date,default: null}
 }, {
 timestamps: true

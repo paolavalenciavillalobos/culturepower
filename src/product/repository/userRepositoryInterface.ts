@@ -9,5 +9,5 @@ export interface IProductRepository {
     getById(id: string): Promise<Product | null>
     updateProduct(id: string, dataUpdate: UpdateProductDto): Promise<Product | null>
     softDeleteProduct(id: string): Promise<Product | null>
-    updateAmount(id: string, amountUpdate: AmountUpdateDto): Promise<Product | null>
+    updateAmount(id: string, amountUpdate: number): Promise<Product | null>
 }
