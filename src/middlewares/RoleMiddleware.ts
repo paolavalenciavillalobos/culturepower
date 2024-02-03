@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express"
 
 export class VerifyRoleUser {
     static async verify (req: Request, res: Response, next: NextFunction) {
-        const { user } = req
+        const { headers } = req
     if (!user) {
         return res.status(401).json('Unauthorized: User not authenticated')
     }

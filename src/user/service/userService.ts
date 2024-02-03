@@ -58,8 +58,8 @@ export class UserService implements IUserService {
     
         userLogin.password = null
         delete userLogin.password
-    
-        const payload = {...userLogin, role: userLogin.role}
+        console.log(userLogin)
+        const payload = {...userLogin}
         const secretKey = process.env.JWT_SECRET_KEY as string
         const options = { expiresIn: '1h'}
     

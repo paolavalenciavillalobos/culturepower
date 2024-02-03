@@ -3,6 +3,7 @@ import { Request, Response } from "express"
 import { createValidator } from "../validation/createValidatorYup"
 import { loginValidator } from "../validation/loginValidatorYup"
 import { IUserController } from "./userControllerInterface"
+import { verifyAdmin } from "../validation/verifyAdmin"
 
 export class UserController implements IUserController {
 
@@ -76,6 +77,7 @@ export class UserController implements IUserController {
 
     async updateJewelAmount(req: Request, res: Response): Promise<void> {
         try{
+            verifyAdmin(req)
             const {id} = req.params
             const {body} = req
             const updated = await this.userService.updateJewelAmount(id, body)
