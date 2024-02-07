@@ -12,6 +12,7 @@ export class UserController implements IUserController {
    async createUser(req: Request, res: Response): Promise<void> {
         try{
             const { body } = req
+            body.photo = '../../uploads/01.jpg'
             await createValidator.validate(body, { abortEarly: false })
             const newUser = await this.userService.createUser(body)
             res.status(200).json(newUser)
