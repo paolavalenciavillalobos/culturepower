@@ -19,7 +19,7 @@ export class UserService implements IUserService {
     //LOGICA DA FOTO
 
     async createUser(userData: CreateUserDto): Promise<User | null> {
-        const existingUser = await this.findUserByEmail(userData.email);
+        const existingUser = await this.userRepository.findUserByEmail(userData.email);
         if (existingUser) {
             throw new Error('User with this email already exists');
         }

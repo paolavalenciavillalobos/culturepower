@@ -11,13 +11,17 @@ export class UserController implements IUserController {
 
    async createUser(req: Request, res: Response): Promise<void> {
         try{
+            console.log(req.file)
+            console.log(req.body)
             const { body } = req
-            body.photo = '../../uploads/01.jpg'
+            if(req.file){
+            body.photo = req.file.filename //
+            }
             await createValidator.validate(body, { abortEarly: false })
             const newUser = await this.userService.createUser(body)
             res.status(200).json(newUser)
         }catch(e: any){
-            res.status(500).json(e)
+            res.status(500).json({message: e.message})
         }
     }
     async findUserByEmail(req: Request, res: Response): Promise<void> {
