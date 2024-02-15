@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express"
+import jwt from 'jsonwebtoken'
 
-export class VerifyRoleUser {
+/*export class VerifyRoleUser {
     static async verify (req: Request, res: Response, next: NextFunction) {
         const { headers } = req
     if (!user) {
@@ -10,4 +11,26 @@ export class VerifyRoleUser {
         return next()
     }
     return res.status(401).json('Unauthorized: Admin access required')
-}}
+}}*/
+
+export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
+    const { headers } = req
+    if (!headers.authorization) {
+       throw new Error('token not found')
+    }
+
+    const [, token] = headers.authorization.split(" ")
+    const tokenDecoded = jwt.decode(token) as Token
+
+    if(!tokenDecoded){
+        throw new Error('cannot decoded token')
+    }
+
+    if(tokenDecoded.role === 'admin'){
+        next()
+    } 
+    throw new Error('user is not admin')
+
+}
+
+type Token = { role: string }
