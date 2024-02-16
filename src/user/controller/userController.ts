@@ -16,7 +16,7 @@ export class UserController implements IUserController {
             console.log(req.body)
             const { body } = req
             if(req.file){
-            body.photo = req.file.filename //
+            body.photo = req.file.filename // datos img
             }
             await createValidator.validate(body, { abortEarly: false })
             const newUser = await this.userService.createUser(body)
