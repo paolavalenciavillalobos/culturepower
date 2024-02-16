@@ -7,8 +7,8 @@
     "test": "vitest",
     "build": "tsup src",
     "start": "node dist/index.js",
-    "start:code": "ts-node src/index.ts",
-    "start:dev": "ts-node-dev src/index.ts",
+    "code": "ts-node src/index.ts",
+    "dev": "ts-node-dev src/index.ts",
     "seeder": "ts-node-dev seed/admin.ts"
   },
   "author": "",
