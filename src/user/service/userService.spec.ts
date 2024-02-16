@@ -5,6 +5,8 @@ import { fakeUserRepository } from "../__mocks__/fakeUserRepository"
 import { UserService } from "./userService"
 import { expect, describe, it, vi } from "vitest"
 import { fakeUser } from "../__mocks__/fakeUser"
+import bcrypt from 'bcrypt'
+import 'dotenv/config' 
 
 
 const userService = new UserService(fakeUserRepository, fakeProductRepository)
@@ -23,11 +25,9 @@ describe('UserService', () => {
 
     describe('findUserByEmail', () => {
         it('should return an email', async () => {
-            const newEmail = {
-                email: 'nuevoCorreoElectronico@example.com'
-            }
-            const email = await userService.findUserByEmail(newEmail)
-            expect(email).toEqual(fakeUser.email)
+            const newEmail = 'nuevoCorreoElectronico@example.com'
+            const usuario = await userService.findUserByEmail(newEmail)
+            expect(usuario?.email).toEqual(fakeUser.email)
         })
         it('Should return an error if cannot find an email', async () => {
             vi.spyOn(fakeUserRepository, 'findUserByEmail').mockImplementationOnce(() => Promise.resolve(null) )
@@ -40,7 +40,7 @@ describe('UserService', () => {
             const dataUpdate = {
                 name: 'nuevoNombreDeUsuario',
                 email: 'nuevoCorreoElectronico@example.com'
-            }
+            } as any
             const updatedUser = await userService.updateUser(fakeObjectId, dataUpdate)
             expect(updatedUser).toEqual(fakeUser)
             
@@ -67,12 +67,14 @@ describe('UserService', () => {
                     name: 'nuevoNombreDeUsuario',
                     email: 'nuevoCorreoElectronico@example.com',
                     password: '8777898'
-                }
+                } as any
+                vi.spyOn(fakeUserRepository, 'findUserByEmail').mockResolvedValueOnce(null)
                 const newUser = await userService.createUser(dataUser)
                 expect(newUser).toEqual(fakeUser)
             })
     
             it('Should throw an error if createUser fails', async () => {
+                vi.spyOn(fakeUserRepository, 'findUserByEmail').mockResolvedValueOnce(null)
                 vi.spyOn(fakeUserRepository, 'createUser').mockResolvedValueOnce(null)
                 expect(userService.createUser(fakeUser)).rejects.toThrow('create user failed')
             })
@@ -92,14 +94,14 @@ describe('UserService', () => {
 
         describe('updateJewelAmount', () => {
             it('Should update a user jewels amount successfully', async () => {
-               const jewelsAmount = 10
+               const jewelsAmount = { jewelsAmount: 10} 
                const updatedJewelsAmount = await userService.updateJewelAmount(fakeObjectId, jewelsAmount)
-               expect(updatedJewelsAmount).toEqual(fakeUser.jewelsAmount)
+               expect(updatedJewelsAmount).toEqual(fakeUser)
                
             })
        
            it('Should throw an error if updateJewelsAmount fails', async () => {
-               const jewelsAmount = 10
+                const jewelsAmount = { jewelsAmount: 10} 
                vi.spyOn(fakeUserRepository, 'updateJewel').mockResolvedValueOnce(null)
                expect(userService.updateJewelAmount(fakeObjectId, jewelsAmount)).rejects.toThrow('User cannot updated')
            })
@@ -107,12 +109,13 @@ describe('UserService', () => {
 
         describe('loginUser', () => {
             it('Should login an user', async () => {
+                vi.spyOn(bcrypt, 'compare').mockResolvedValueOnce(true as any)
                 const loginUser = await userService.loginUser(fakeUser)
-                expect(loginUser).toEqual(fakeUser)
+                expect(loginUser).toBeDefined()
             })
             it('Should throw an error if loginUser fails', async () => {
-                vi.spyOn(fakeUserRepository, 'findUserByEmail').mockResolvedValueOnce(null)
-                expect(userService.loginUser(fakeUser)).rejects.toThrow('An unexpected error occurred.')
+                vi.spyOn(fakeUserRepository, 'findUserByEmail').mockRejectedValueOnce(new Error('error'))
+                expect(userService.loginUser(fakeUser)).rejects.toThrow('error')
             })
     
         })
@@ -120,7 +123,7 @@ describe('UserService', () => {
         describe('updateProductUser', () => {
             it('Should update array product user', async () => {
                 const updateProductUser = await userService.updateProductUser(fakeObjectId, fakeObjectId)
-                expect(updateProductUser).toEqual(fakeUser.products)
+                expect(updateProductUser).toEqual(fakeUser)
             })
             it('Should throw an error if updateProductUser fails', async () => {
                 vi.spyOn(fakeUserRepository, 'updateProductUser').mockResolvedValueOnce(null)

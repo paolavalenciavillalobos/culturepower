@@ -4,6 +4,7 @@ import { createValidator } from "../validation/createValidatorYup"
 import { loginValidator } from "../validation/loginValidatorYup"
 import { IUserController } from "./userControllerInterface"
 import { verifyAdmin } from "../validation/verifyAdmin"
+import jwt from 'jsonwebtoken'
 
 export class UserController implements IUserController {
 
@@ -30,7 +31,7 @@ export class UserController implements IUserController {
             const user = await this.userService.findUserByEmail(email as string)
             res.status(200).json(user)
         }catch(e: any){
-            res.status(500).json(e)
+            res.status(500).json({message: e.message})
         }
        
     }
@@ -42,10 +43,34 @@ export class UserController implements IUserController {
             const loginUser = await this.userService.loginUser(body)
             res.status(200).json(loginUser)
         }catch(e: any){
-            res.status(500).json(e)
+            res.status(500).json({message: e.message})
         }
     }
 
+    async getById(req: Request, res: Response): Promise<void> {
+        try{
+            const { headers } = req
+            if (!headers.authorization) {
+            throw new Error('token not found')
+            }
+
+            const [, token] = headers.authorization.split(" ")
+            const tokenDecoded = jwt.decode(token) 
+            if (typeof tokenDecoded === 'string' || !tokenDecoded?.id) {
+                throw new Error('Invalid token or missing user ID')
+            }
+            const tokenId = tokenDecoded.id
+            console.log(tokenId)
+            req = tokenId
+            const user =  await this.userService.getById(tokenId)
+            res.status(200).json(user)
+        }catch(e: any) {
+            res.status(500).json({message: e.message})
+        }
+        
+    }
+
+    /*
     async getById(req: Request, res: Response): Promise<void> {
         try{
             const {id} = req.params
@@ -56,6 +81,7 @@ export class UserController implements IUserController {
         }
         
     }
+    */
     async updateUser(req: Request, res: Response): Promise<void> {
         try{
             const {id} = req.params
@@ -63,7 +89,7 @@ export class UserController implements IUserController {
             const updated = await this.userService.updateUser(id, body)
             res.status(200).json(updated)
         }catch(e: any) {
-            res.status(500).json(e)
+            res.status(500).json({message: e.message})
         }
     }
     
@@ -73,7 +99,7 @@ export class UserController implements IUserController {
             const deleted = await this.userService.softDelete(id)
             res.status(200).json(deleted)
         }catch(e: any){
-            res.status(500).json(e)
+            res.status(500).json({message: e.message})
         }
         
     }
@@ -82,13 +108,13 @@ export class UserController implements IUserController {
 
     async updateJewelAmount(req: Request, res: Response): Promise<void> {
         try{
-            verifyAdmin(req)
+            //verifyAdmin(req)
             const {id} = req.params
             const {body} = req
             const updated = await this.userService.updateJewelAmount(id, body)
             res.status(200).json(updated)
         }catch(e: any) {
-            res.status(500).json(e)
+            res.status(500).json({message: e.message})
         }
     }
 

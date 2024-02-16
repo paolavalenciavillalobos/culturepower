@@ -20,11 +20,13 @@ export class UserService implements IUserService {
 
     async createUser(userData: CreateUserDto): Promise<User | null> {
         const existingUser = await this.userRepository.findUserByEmail(userData.email);
+        console.log(existingUser)
         if (existingUser) {
             throw new Error('User with this email already exists');
         }
         userData.password = await bcrypt.hash(userData.password, 5)
         const newUser = await this.userRepository.createUser(userData)
+        console.log(userData.role)
         if(!newUser){
             throw new Error('create user failed')
         }
@@ -68,11 +70,7 @@ export class UserService implements IUserService {
         return token
       }
      catch (error: any) {
-        if (error instanceof Error) {
-            throw new Error(error.message)
-        } else {
-            throw new Error('An unexpected error occurred.')
-        }
+            throw new Error(error.message)     
     }
 }
 

@@ -21,12 +21,18 @@ export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => 
 
     const [, token] = headers.authorization.split(" ")
     const tokenDecoded = jwt.decode(token) as Token
+    console.log('role:',tokenDecoded.role)
 
     if(!tokenDecoded){
         throw new Error('cannot decoded token')
     }
 
+    if(tokenDecoded.role === undefined){
+        throw new Error('user role is undefined')
+    } 
+
     if(tokenDecoded.role === 'admin'){
+        
         next()
     } 
     throw new Error('user is not admin')

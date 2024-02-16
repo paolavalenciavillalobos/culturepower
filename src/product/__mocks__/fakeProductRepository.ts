@@ -6,5 +6,6 @@ export const fakeProductRepository = {
     getAll() {return Promise.resolve(fakeProductsArray)},
     getById() {return Promise.resolve(fakeProduct)},
     updateProduct() {return Promise.resolve(fakeProduct)},
-    softDeleteProduct() {return Promise.resolve(fakeProduct)} 
+    softDeleteProduct() {return Promise.resolve(fakeProduct)},
+    updateAmount() {return Promise.resolve(fakeProduct)}
 } as unknown as IProductRepository
