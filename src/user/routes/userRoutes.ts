@@ -13,4 +13,4 @@ userRoutes.get('/user/', AuthenticationMiddleware.handler, userFactoryModule.get
 userRoutes.put('/user/:id', AuthenticationMiddleware.handler, multerMiddleware.single("photo"), userFactoryModule.updateUser.bind(userFactoryModule))
 userRoutes.put('/user/delete/:id', AuthenticationMiddleware.handler, userFactoryModule.softDelete.bind(userFactoryModule))
 userRoutes.put('/user/jewels/:id', AuthenticationMiddleware.handler, verifyAdmin, userFactoryModule.updateJewelAmount.bind(userFactoryModule))
-userRoutes.put('/user/:idUser/claims/:idProduct', AuthenticationMiddleware.handler, verifyAdmin, userFactoryModule.updateProductUser.bind(userFactoryModule))
+userRoutes.put('/user/:idUser/claims/:idProduct', AuthenticationMiddleware.handler, userFactoryModule.updateProductUser.bind(userFactoryModule))

@@ -9,6 +9,9 @@ export class ProductController implements IProductController {
    async createProduct(req: Request, res: Response): Promise<void> {
         try{
             const { body } = req
+            if(req.file){
+                body.photo = req.file.filename
+                }
             const newProduct = await this.productService.createProduct(body)
             console.log(newProduct)
             res.status(200).json(newProduct)
@@ -43,6 +46,9 @@ export class ProductController implements IProductController {
         try{
             const {id} = req.params
             const {body} = req
+            if(req.file){
+                body.photo = req.file.filename
+                }
             const updated = await this.productService.updateProduct(id, body)
             res.status(200).json(updated)
         }catch(e: any) {

@@ -14,9 +14,9 @@ export class AuthenticationMiddleware {
            // jwt.verify(token, process.env.JWT_SECRET_KEY as string)
             const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string)
             
-            console.log(tokenDecoded)
+            //console.log(tokenDecoded)
             const tokenDecodedRole = jwt.decode(token)
-            console.log(tokenDecodedRole)
+            //console.log(tokenDecodedRole)
             next()
         }catch(e: any){
             res.status(401).json('No authorized')

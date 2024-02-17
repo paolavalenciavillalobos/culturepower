@@ -16,26 +16,26 @@ import jwt from 'jsonwebtoken'
 export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
     const { headers } = req
     if (!headers.authorization) {
-       throw new Error('token not found')
+        return res.status(401).json('Token not provided');//res
     }
 
     const [, token] = headers.authorization.split(" ")
     const tokenDecoded = jwt.decode(token) as Token
-    console.log('role:',tokenDecoded.role)
+    console.log('role:',tokenDecoded)
 
     if(!tokenDecoded){
-        throw new Error('cannot decoded token')
+        return res.status(401).json('cannot decoded token');
     }
 
     if(tokenDecoded.role === undefined){
-        throw new Error('user role is undefined')
+        return res.status(401).json('user role is undefined')
     } 
 
     if(tokenDecoded.role === 'admin'){
         
-        next()
+       return next()
     } 
-    throw new Error('user is not admin')
+    res.status(401).json('user is not admin')
 
 }
 

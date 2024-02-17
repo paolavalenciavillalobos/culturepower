@@ -79,3 +79,6 @@ ssh -T git@github.com
 Update Push with mongoose/
 
 /users/:user_id/claims/:product_id
+
+
+url do railway example: https://culturepower-production-c11a.up.railway.app/user/create

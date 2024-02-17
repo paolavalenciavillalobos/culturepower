@@ -60,8 +60,8 @@ export class UserService implements IUserService {
     
         userLogin.password = null
         delete userLogin.password
-        console.log(userLogin)
-        const payload = {...userLogin}
+        //console.log(userLogin)
+        const payload = { id: (userLogin as any)._id, role: userLogin.role}
         const secretKey = process.env.JWT_SECRET_KEY as string
         const options = { expiresIn: '1h'}
     
@@ -82,6 +82,14 @@ export class UserService implements IUserService {
         }
         return user
     }
+
+    /*async getById(id: string): Promise<User | null> {
+        const user =  await this.userRepository.getById(id)
+        if(!user){
+            throw new Error('cannot find this user')
+        }
+        return user
+    }*/
     async updateUser(id: string, dataUpdate: UpdateUserDto): Promise<User | null> {
         const validId = await this.userRepository.getById(id)
         if(!validId){
