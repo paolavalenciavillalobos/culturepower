@@ -11,12 +11,11 @@ import { LoginDataDTO } from "../dtos/loginDataDto"
 import { JewelsUpdateDto } from "../dtos/jewelUpdateDto"
 import { IProductRepository } from "../../product/repository/userRepositoryInterface"
 
-//, private productRepository: IProductRepository
 
 export class UserService implements IUserService {
     constructor(private userRepository: IUserRepository, private productRepository: IProductRepository){}
 
-    //LOGICA DA FOTO
+    
 
     async createUser(userData: CreateUserDto): Promise<User | null> {
         const existingUser = await this.userRepository.findUserByEmail(userData.email);
@@ -60,7 +59,6 @@ export class UserService implements IUserService {
     
         userLogin.password = null
         delete userLogin.password
-        //console.log(userLogin)
         const payload = { id: (userLogin as any)._id, role: userLogin.role}
         const secretKey = process.env.JWT_SECRET_KEY as string
         const options = { expiresIn: '1h'}
@@ -83,13 +81,6 @@ export class UserService implements IUserService {
         return user
     }
 
-    /*async getById(id: string): Promise<User | null> {
-        const user =  await this.userRepository.getById(id)
-        if(!user){
-            throw new Error('cannot find this user')
-        }
-        return user
-    }*/
     async updateUser(id: string, dataUpdate: UpdateUserDto): Promise<User | null> {
         const validId = await this.userRepository.getById(id)
         if(!validId){
@@ -116,7 +107,6 @@ export class UserService implements IUserService {
         return deleted
     }
 
-    //enviar joia
     async updateJewelAmount(id: string, jewelUpdate: JewelsUpdateDto): Promise<User | null> {
         const validId = await this.userRepository.getById(id)
         if(!validId){
@@ -130,7 +120,6 @@ export class UserService implements IUserService {
         return updated
     }
 
-    //resgatar produto/atualizar array de produtos em usuario
 
     async updateProductUser(idUser: string, idProduct: string): Promise<User | null> {
         const user = await this.userRepository.getById(idUser)
@@ -153,7 +142,7 @@ export class UserService implements IUserService {
             throw new Error('Insufficient jewels')
         }
         const updateAmount = product.amount - 1
-        const updatedProduct = await this.productRepository.updateAmount(idProduct, updateAmount );
+        const updatedProduct = await this.productRepository.updateAmount(idProduct, updateAmount )
         if (!updatedProduct) {
             throw new Error('Failed to update product');
         }

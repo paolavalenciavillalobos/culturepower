@@ -48,21 +48,22 @@ export class UserController implements IUserController {
     }
 
     async getById(req: Request, res: Response): Promise<void> {
-        try{
-            const { headers } = req
-            if (!headers.authorization) {
-            throw new Error('token not found')
-            }
+        
+        const { headers } = req;
 
-            const [, token] = headers.authorization.split(" ")
-            const tokenDecoded = jwt.decode(token) 
-            if (typeof tokenDecoded === 'string' || !tokenDecoded?.id) {
-                throw new Error('Invalid token or missing user ID')
+        if (!headers.authorization) {
+            res.status(401).json('Token not provided');
+            return
+        }
+    
+        const [, token] = headers.authorization.split(" ")
+        try {
+            const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string) 
+            if (!tokenDecoded || typeof tokenDecoded !== 'object' || !('id' in tokenDecoded)) {
+                throw new Error('Invalid token')
             }
-            const tokenId = tokenDecoded.id
-            console.log(tokenId)
-            req = tokenId
-            const user =  await this.userService.getById(tokenId)
+            const userId = tokenDecoded?.id
+            const user =  await this.userService.getById(userId)
             res.status(200).json(user)
         }catch(e: any) {
             res.status(500).json({message: e.message})
