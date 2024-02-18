@@ -1,4 +1,4 @@
-//capaz de logar/ and CRUD
+
 
 import { CreateUserDto } from "../dtos/createUserDto"
 import { UpdateUserDto } from "../dtos/updateUserDto"
@@ -147,13 +147,6 @@ export class UserService implements IUserService {
             throw new Error('Failed to update product');
         }
 
-        /*if (typeof user.jewelsAmount !== 'number') {
-            throw new Error('Invalid type')
-        }
-
-        if (user.jewelsAmount < product.value) {
-            throw new Error('Insufficient jewels')
-        }*/
 
         const newJewelsAmount = jewelsAmount - product.value
         const updatedUserJewels = await this.userRepository.updateJewel(idUser, { jewelsAmount: newJewelsAmount })

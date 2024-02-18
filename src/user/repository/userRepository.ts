@@ -39,7 +39,7 @@ export class UserRepository implements IUserRepository {
         return deleted
     }
 
-    //enviar joias
+
 
     async updateJewel(id: string, jewelUpdate: JewelsUpdateDto): Promise<User | null> {
         if(!isValidObjectId(id)){

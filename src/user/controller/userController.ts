@@ -3,7 +3,6 @@ import { Request, Response } from "express"
 import { createValidator } from "../validation/createValidatorYup"
 import { loginValidator } from "../validation/loginValidatorYup"
 import { IUserController } from "./userControllerInterface"
-import { verifyAdmin } from "../validation/verifyAdmin"
 import jwt from 'jsonwebtoken'
 
 export class UserController implements IUserController {
@@ -16,7 +15,7 @@ export class UserController implements IUserController {
             console.log(req.body)
             const { body } = req
             if(req.file){
-            body.photo = req.file.filename // datos img
+            body.photo = req.file.filename 
             }
             await createValidator.validate(body, { abortEarly: false })
             const newUser = await this.userService.createUser(body)
@@ -71,18 +70,6 @@ export class UserController implements IUserController {
         
     }
 
-    /*
-    async getById(req: Request, res: Response): Promise<void> {
-        try{
-            const {id} = req.params
-            const user =  await this.userService.getById(id)
-            res.status(200).json(user)
-        }catch(e: any) {
-            res.status(500).json(e)
-        }
-        
-    }
-    */
     async updateUser(req: Request, res: Response): Promise<void> {
         try{
             const {id} = req.params
@@ -108,11 +95,9 @@ export class UserController implements IUserController {
         
     }
 
-    //ENVIAR JOIA
 
     async updateJewelAmount(req: Request, res: Response): Promise<void> {
         try{
-            //verifyAdmin(req)
             const {id} = req.params
             const {body} = req
             const updated = await this.userService.updateJewelAmount(id, body)
@@ -122,7 +107,6 @@ export class UserController implements IUserController {
         }
     }
 
-    //ATUALIZAR ARRAY DE PRODUCTS DE USUARIO
 
     async updateProductUser (req: Request, res: Response): Promise<void> {
         try{
